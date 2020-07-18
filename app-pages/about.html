@@ -1,0 +1,109 @@
+<div class="outer-page-container" id="about">
+    <style>
+        div#about div ul {
+            margin: 0px;
+            padding-left: 30px;
+        }
+
+            div#about div ul li span.bug_id {
+                padding: 0px 3px;
+                margin-right: 5px;
+                background-color: grey;
+                color: white;
+                border-radius: 2px;
+            }
+
+        div#about div div.version-title span {
+            background-color: grey;
+            padding: 2px 5px;
+            margin-left: 5px;
+            border-radius: 2px;
+            color: white;
+            font-weight: normal;
+        }
+    </style>
+    <script>
+        // Code here runs when the page loads
+        // Get handler for about page
+        var timelinePage = document.getElementById("about");
+        // Set the title in the header
+        headerTitle.innerHTML = "About";
+        // Set the action butttons
+        actionButtonsContainer.innerHTML = '<ul id="about-action-buttons"></ul>';
+    </script>
+
+    <!-- This is the app overview, displayed when there are not practice sessions stored (and therefore when the user visits the site for the first time) -->
+    <div>
+        <div class="subheading"><i class="material-icons">info</i><p>Overview</p></div>
+        <p>This app will help you keep track of your music lessons and practice</p>
+        <ul>
+            <li>The timeline section lets you add, edit and delete practice sessions as well as display a list of all practice sessions</li>
+            <li>The goals section lets you add, edit and delete a goal, as well as display the current goal</li>
+            <li>The resources section is incomplete and was not meant to be part of the final product, but I was unable to remove the button for it</li>
+        </ul>
+    </div>
+
+    <!-- This is a changelog listing changes in the app and when they happened -->
+    <div>
+        <div class="subheading"><i class="material-icons">change_history</i><p>Changelog</p></div>
+
+        <div class="subheading version-title" style="margin: 3px 0px">
+            <p>1.0.1<span>Current version</span><span>Hand-in version</span></p>
+        </div>
+        <ul>
+            <li>Fixed bug 5 - Warning icon not displayed on timelines screen</li>
+        </ul>
+
+        <div class="subheading version-title" style="margin: 3px 0px">
+            <p>1.0</p>
+        </div>
+        <ul>
+            <li>Added about section</li>
+            <li>Added confirmation dialogs</li>
+            <li>Some bug fixes</li>
+            <li>Added some comments to the code</li>
+        </ul>
+
+        <div class="subheading version-title" style="margin: 3px 0px">
+            <p>0.1</p>
+        </div>
+        <ul>
+            <li>New</li>
+        </ul>
+    </div>
+
+    <!-- This section lists current known bugs -->
+    <div>
+        <div class="subheading"><i class="material-icons">bug_report</i><p>Known bugs</p></div>
+        <ul>
+            <li><span class="bug_id">1</span>Cannot navigate from resources page about page</li>
+            <li><span class="bug_id">2</span>Updating the list of practice sessions displayed from the database requires a page reload</li>
+            <li><span class="bug_id">3</span>Updating the goal displayed from the database requires a page reload and/or switching tabs</li>
+            <li><span class="bug_id">4</span>Edit button displayed on goals screen when no goal exists</li>
+            <li><span class="bug_id">5</span>Wraning icon not displayed on timeline screen</li>
+            <li><span class="bug_id">6</span>Vertical scrolling for action buttons needs a better solution</li>
+        </ul>
+    </div>
+
+    <!-- This section links to the new version -->
+    <div>
+        <div class="subheading"><i class="material-icons">new_releases</i><p>New version</p></div>
+        <p>Link to new version with the latest updates and features. This version will remain here since it is the one I handed in</p>
+        <a href="https://musiclessontracker2.netlify.com" target="_blank">
+            <button style="margin-top: 4px; padding: 5px 8px;">
+                <div style="display: flex; align-items: center">
+                    <i class="material-icons" style="margin-right: 5px;">open_in_new</i>
+                    <p>New version</p>
+                </div>
+            </button>
+        </a>
+    </div>
+
+    <!-- This section lists what I need to develop next -->
+    <div>
+        <div class="subheading"><i class="material-icons">assignment</i><p>To develop next</p></div>
+        <ul>
+            <li>None</li>
+        </ul>
+    </div>
+</div>

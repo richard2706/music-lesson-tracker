@@ -1,0 +1,148 @@
+<div class="outer-page-container" id="goals">
+    <style>
+        #goals div#buttons {
+            margin-top: 5px;
+        }
+
+        #goals div#buttons button {
+            width: 90px;
+            height: 35px;
+        }
+    </style>
+
+    <!-- This script is an extension of app.js, so it can access all it's variables and methods -->
+    <script>
+        // Code here runs when the page loads
+        // Set the title in the action bar
+        headerTitle.innerHTML = "Goals";
+
+        // Set the action buttons
+        actionButtonsContainer.innerHTML = '<ul id="goals-action-buttons">' +
+            '<li><button id="goals-edit" title="Edit goal"><i class="material-icons">edit</i></button></li>' +
+            '</ul>';
+        // Find interface elements on the page so that their values can be used or event handlers can be added
+        var goalsPage = document.getElementById("goals");
+        var editButton = document.getElementById("goals-edit");
+        var setGoalForm = document.getElementById("set-goal-form");
+        var objectiveTextbox = document.getElementById("objective-textbox");
+        var datePicker = document.getElementById("date-picker");
+        var timePicker = document.getElementById("time-picker");
+        var detailsTextbox = document.getElementById("details-textbox");
+        var saveButton = document.getElementById("save-button");
+
+        // Sets the date in the date picker to current date
+        datePicker.valueAsDate = new Date();
+
+        // Get array of goals from the goals table
+        var goals = readAllGoals();
+
+        showContent();
+
+        // Runs when the user clicks the edit button in the toolbar to navigate to the edit goal screen
+        editButton.addEventListener("click", function (event) {
+            // If the number of goals is not 0
+            if (goals.length != 0) {
+                // Runs the editGoal method in app.js so that the goal object object can be accessed on the goal edit page
+                editGoal(goals[0]);
+                // Navivate to the edit goal screen
+                $("#main").load("app-pages/edit-goal.html");
+            }
+        });
+
+        // Runs when the user clicks the save button
+        saveButton.addEventListener("click", function (event) {
+            // These variables get the values that the user entered into the fields above
+            var objective = objectiveTextbox.value;
+            var date = datePicker.value;
+            var length = timePicker.value;
+            var details = detailsTextbox.value;
+            // Check if any required fields are blank or invalid and display a message to the user if they need to change anything
+            if (objective == "" || date == "" || length == "" || length == "00:00") {
+                // Calls showNotification method from app.js
+                showNotification("Please fill in all information");
+            } else {
+                // Otherwise add the goal to the database using the addGoal method defined in app.js
+                addGoal(objective, date, length, details);
+                // Call the showContent method to display the new goal
+                showContent();
+            }
+        });
+
+        // Used to show the objectves or the form to add an objective
+        function showContent() {
+            if (goals.length == 0)
+                setGoalForm.style.display = "block";
+            else {
+                var content = '';
+                var styles = '<style>' +
+                        'div#goals div.goal p.objective {' +
+                        'font-size: 18px;' +
+                        'font-weight: 500;' +
+                        '}' +
+                    '</style>';
+                setGoalForm.style.display = "none";
+                goals.forEach(function (goal) {
+                    // The length from the array
+                    var length = goal.length;
+                    // The length split into an array of the hours then minutes
+                    var lengthArray = length.split(":");
+                    // The first item of the array is the number of hours
+                    var hours = parseInt(lengthArray[0]);
+                    // The second item of teh array is the number of minutes
+                    var mins = parseInt(lengthArray[1]);
+                    // Add a card to the screen for each item in the goals array
+                    content += '<div class="goal">' +
+                        '<p class="objective">' + goal.objective + '</p>' +
+                        '<p>Deadline: ' + goal.date + '</p>' +
+                        '<div class="divider"></div>' +
+                        '<p>Target practice per week: ' + hours + 'h ' + mins + 'm</p>' +
+                        '<div class="divider"></div>' +
+                        '<p>' + goal.details + '</p>' +
+                        '<p class="id" hidden>' + goal.goalID + '</p>' +
+                    '</div>';
+                });
+                goalsPage.innerHTML = styles + content;
+            }
+        }
+    </script>
+
+    <!-- The form that the user can fill in to add a new goal -->
+    <div id="set-goal-form">
+        <div class="subheading"><i class="material-icons">flag</i><p>Set yourself a goal:</p></div>
+
+        <div class="textbox" title="What is your aim?">
+            <p>Objective</p>
+            <input id="objective-textbox" type="text" maxlength="100" />
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="date" title="What is the deadline?">
+            <p>Deadline Date</p>
+            <input id="date-picker" type="date" />
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="time" title="How long should you practice per week for this?">
+            <p>Number of hours practice per week <span style="color:grey">hh:mm</span></p>
+            <input id="time-picker" type="time" />
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="multi-line-textbox" title="Enter any more details">
+            <p>Details</p>
+            <textarea id="details-textbox" maxlength="250"/>
+        </div>
+
+        <div id="buttons">
+            <button id="save-button">
+                <div style="display: flex; align-items: center">
+                    <i class="material-icons" style="margin-right: 8px;">save</i>
+                    <p>Save</p>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>

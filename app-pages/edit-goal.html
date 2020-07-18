@@ -1,0 +1,97 @@
+<div class="outer-page-container" id="goals">
+    <!-- This script is an extension of app.js, so it can access all it's variables and methods -->
+    <script>
+        // Code here runs when the page loads
+        // Set the title in the header. "&#9656;" is a small arrow
+        headerTitle.innerHTML = "Goals &#9656; Edit goal";
+        // Set the action buttons
+        actionButtonsContainer.innerHTML = '<ul id="edit-goal-action-buttons">' +
+            '<li><button id="edit-goal-delete" title="Delete"><i class="material-icons">delete</i></button></li>' +
+            '<li><button id="edit-goal-cancel" title="Cancel"><i class="material-icons">clear</i></button></li>' +
+            '<li><button id="edit-goal-save" title="Save"><i class="material-icons">done</i></button></li>' +
+            '</ul>';
+        // Find interface elements on the page so that their values can be used or event handlers can be added
+        var deleteButton = document.getElementById("edit-goal-delete");
+        var cancelButton = document.getElementById("edit-goal-cancel");
+        var saveButton = document.getElementById("edit-goal-save");
+        var objectiveTextbox = document.getElementById("objective-textbox");
+        var datePicker = document.getElementById("date-picker");
+        var timePicker = document.getElementById("time-picker");
+        var detailsTextbox = document.getElementById("details-textbox");
+
+        objectiveTextbox.value = selectedGoal.objective;
+        datePicker.value = selectedGoal.date;
+        timePicker.value = selectedGoal.length;
+        detailsTextbox.value = selectedGoal.details;
+
+        // Runs when the delete button is clicked
+        deleteButton.addEventListener("click", function () {
+            showConfirmationDialog("Delete goal", "Are you sure you want to delete your goal?");
+        });
+
+        // When the accept button is clicked in the confirmation dialog box
+        confirmationAcceptButton.addEventListener("click", () => {
+            // Displays a notification to tell the user that the goal is deleted
+            showNotification("Goal deleted");
+            // Deletes the goal from the database
+            deleteGoal(selectedGoal.goalID);
+            // Navigates back to the goals screen
+            $("#main").load("app-pages/goals.html");
+        });
+
+        // When the reject button is clicked in the confirmation dialog box
+        confirmationRejectButton.addEventListener("click", () => {
+            // Show a notification to tell the user that the goal was not deleted
+            showNotification("Goal not deleted");
+        });
+
+        // Runs when the cancel button is clicked
+        cancelButton.addEventListener("click", function () {
+            $("#main").load("app-pages/goals.html");
+        });
+
+        // Runs when the save button is clicked
+        saveButton.addEventListener("click", function () {
+            // Check if any values have changed
+            if (objectiveTextbox.value != selectedGoal.objective || datePicker.value != selectedGoal.date || timePicker.value != selectedGoal.length || detailsTextbox.value != selectedGoal.details)
+                // Check if any required fields are blank or invalid
+                if (objectiveTextbox.value == "" || datePicker.value == "" || timePicker.value == "")
+                    // Display a message to the user if they need to fill anything in
+                    showNotification("Please fill in all information");
+                else
+                    // Update the goal using the updateGoal function in app.js if all fields are correct
+                    updateGoal(selectedGoal.goalID, objectiveTextbox.value, datePicker.value, timePicker.value, detailsTextbox.value);
+            else
+                // Navigate back to the goals page
+                $("#main").load("app-pages/goals.html");
+        });
+    </script>
+
+    <div id="set-goal-form">
+        <div class="textbox" title="What is your aim?">
+            <p>Objective</p>
+            <input id="objective-textbox" type="text" maxlength="100"/>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="date" title="What is the deadline?">
+            <p>Date</p>
+            <input id="date-picker" type="date" />
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="time" title="How long should you practice per week for this?">
+            <p>Number of hours practice per week</p>
+            <input id="time-picker" type="time" />
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="multi-line-textbox" title="Enter any more details">
+            <p>Details</p>
+            <textarea id="details-textbox" maxlength="250"/>
+        </div>
+    </div>
+</div>

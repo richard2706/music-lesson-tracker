@@ -1,0 +1,697 @@
+<!-- This file is index.html used for the app shell (coded in HTML) and styling for most of the app (in CSS).
+    This also contains some metadata in the header about the app -->
+
+<!DOCTYPE html>
+<html>
+<!-- The header contains metadata about the app as well as the CSS styling -->
+<head>
+    <!-- Title that is displayed in the tab -->
+    <title>Music Lesson Tracker</title>
+    <!-- Sets the width of the page to the width of the viewport (ie browser windows size), and prevent zooming-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <!-- Theme colour used by some browsers (eg. chrome to colour the address bar) -->
+    <meta name="theme-color" content="#ff7d00">
+    <!-- Link to google material design icons stylesheet -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Link to the application manifest -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Link to jQuery file to add additional functionality -->
+    <script src="jquery-3.3.1.js"></script>
+    <!-- Stylesheet in the same file as the shell so that it will load at the same time, rather than just after, the HTML -->
+    <style>
+        /* Styling applied to every element */
+        * {
+            /* Uses correct device font based on OS, which also improves performance since the font is already on the device */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            /* Removes blue flash when clicking an element on Android */
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            /* Default font size for all elements to 16px (This is already the default for many elements, but not all) */
+            font-size: 16px;
+        }
+
+            *:focus {
+                /* Remove blue outline when elements are in focus */
+                outline: none;
+            }
+
+        body {
+            margin: 0;
+            background-color: #eeeeee;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
+        /* Header styling */
+        header {
+            top: 0;
+            width: 100%;
+            height: 56px;
+            position: fixed;
+            background-color: #ff7d00;
+            box-shadow: 0px 2px 5px rgba(0,0,0,.25);
+        }
+
+            header div {
+                width: 100%;
+                height: 100%;
+                display: -webkit-flex;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+            }
+
+                header div p {
+                    padding-left: 20px;
+                    white-space: nowrap;
+                    color: white;
+                    float: left;
+                }
+
+                header div div#action-buttons-container {
+                    display: -webkit-flex;
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-left: auto;
+                    float: right;
+                }
+
+                    header div div#action-buttons-container ul {
+                        padding: 0;
+                        height: 100%;
+                        list-style-type: none;
+                        overflow-x:scroll;
+                    }
+
+                        header div div#action-buttons-container ul li {
+                            float: right;
+                            height: 100%;
+                            display: inline;
+                        }
+
+                            header div div#action-buttons-container ul li button {
+                                width: 56px;
+                                height: 100%;
+                            }
+
+        /* Header search box styling */
+        form.search-form {
+            float: right;
+        }
+
+            form.search-form input[type=text] {
+                padding: 10px;
+                border: none;
+                color: white;
+                width: 100%;
+                background-color: #ff9a3d;
+            }
+
+            form.search-form ::placeholder {
+                color: white;
+            }
+
+        /* Main block styling */
+        main div.outer-page-container {
+        }
+
+            /* The > operator means that the styling is applied to direct children of the element on the left */
+            main div.outer-page-container > div {
+                margin-bottom: 15px;
+                padding: 10px;
+                background-color: white;
+                box-shadow: 1px 1px 4px rgba(0,0,0,.1);
+            }
+
+                main div.outer-page-container > div.card {
+                    display: -webkit-flex;
+                    display: flex;
+                    align-items: center;
+                    overflow: hidden;
+                }
+
+                    main div.outer-page-container > div.card input[type=checkbox] {
+                        margin: 0px 20px 0px 10px;
+                    }
+
+                    main div.outer-page-container > div.card.selected {
+                        background-color: #ffae43 !important;
+                    }
+
+        /* Button styling */
+        button {
+            background-color: #ff7d00;
+            cursor: pointer;
+            border: none;
+            color: white;
+        }
+
+            button:hover {
+                background-color: #e65c00;
+            }
+
+            button:focus {
+                background-color: #ff7d00;
+            }
+
+            button:active {
+                background-color: #e65c00;
+            }
+
+        /* Textbox styling */
+        div.textbox input[type=text] {
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        /* Checkbox styling */
+        div.checkbox {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+        }
+
+            div.checkbox div.checkbox-container-inner {
+                padding: 2px 0px 0px 20px;
+                margin-left: auto;
+            }
+
+                div.checkbox div.checkbox-container-inner input[type=checkbox] {
+                    display: none;
+                }
+
+                div.checkbox div.checkbox-container-inner label.checkbox-container {
+                    position: relative;
+                    display: inline-block;
+                    width: 45px;
+                    height: 20px;
+                }
+
+                    div.checkbox div.checkbox-container-inner label.checkbox-container span.slider {
+                        position: absolute;
+                        cursor: pointer;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        left: 0;
+                        border-radius: 10px;
+                        background-color: #ccc;
+                        -webkit-transition: .1s ease-out;
+                        transition: .1s ease-out;
+                    }
+
+                        div.checkbox div.checkbox-container-inner label.checkbox-container span.slider:before {
+                            position: absolute;
+                            content: "";
+                            height: 10px;
+                            width: 10px;
+                            left: 5px;
+                            bottom: 5px;
+                            border-radius: 50%;
+                            background-color: white;
+                            -webkit-transition: .1s ease-out;
+                            transition: .1s ease-out;
+                        }
+
+                div.checkbox div.checkbox-container-inner input[type=checkbox]:checked + span.slider {
+                    background-color: #ff7d00;
+                }
+
+                    div.checkbox div.checkbox-container-inner input[type=checkbox]:checked + span.slider:before {
+                        -webkit-transform: translateX(25px);
+                        -ms-transform: translateX(25px);
+                        transform: translateX(25px);
+                    }
+
+        /* Date picker, time picker, multiline textbox styling */
+        div.date input[type=date], div.time input[type=time], div.multi-line-textbox textarea, div.textbox input[type=text] {
+            margin-top: 5px;
+            padding: 5px;
+            border: none;
+            background-color: #ff9a3d;
+        }
+
+        /* Multiline Textbox styling */
+        div.multi-line-textbox textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        /* Form divider styling */
+        div.divider {
+            margin: 5px 0px;
+            height: 1px;
+            background-color: #eeeeee;
+        }
+
+        /* Progress bar styling */
+        progress {
+            min-width: 200px;
+            border: none;
+        }
+
+        /* Confirmation dialog box styling */
+        div#confirmation-dialog-box {
+            padding: 20px;
+            position: fixed;
+            top: 50%;
+            margin-top: -100px;
+            height: 160px;
+            background-color: #eeeeee;
+            box-shadow: 2px 2px 5px rgba(0,0,0,.25);
+        }
+
+            div#confirmation-dialog-box div {
+                position: relative;
+                height: 100%;
+            }
+
+            div#confirmation-dialog-box button {
+                width: 90px;
+                height: 35px;
+                border: none;
+                color: white;
+                position: absolute;
+            }
+
+                div#confirmation-dialog-box button#accept-button {
+                    right: 0;
+                    bottom: 0;
+                }
+
+                div#confirmation-dialog-box button#reject-button {
+                    right: 110px;
+                    bottom: 0;
+                }
+
+        /* Notification bar styling */
+        div#notification {
+            position: fixed;
+            bottom: 81px;
+            left: 25px;
+            background-color: #282828;
+        }
+
+            div#notification div {
+                width: 100%;
+                min-height: 56px;
+                display: -webkit-flex;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+                position: relative;
+            }
+
+                div#notification div p {
+                    margin-right: 56px;
+                    padding: 15px 10px 15px 20px;
+                    color: white;
+                }
+
+                div#notification div button#notification-close-button {
+                    padding: 0px 16px;
+                    position: absolute;
+                    right: 0;
+                    height: 100%;
+                    background-color: #282828;
+                }
+
+                    div#notification div button#notification-close-button:hover, div#notification div button#notification-close-button:active {
+                        background-color: #3c3c3c;
+                    }
+
+        /* Navigation bar styling */
+        div.navigation {
+            bottom: 0;
+            width: 100%;
+            height: 56px;
+            position: fixed;
+            background-color: white;
+        }
+
+            div.navigation ul {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                display: -webkit-flex;
+                display: flex;
+                list-style-type: none;
+                overflow: hidden;
+            }
+
+                div.navigation ul li {
+                    /* For Safari 6.1+ */
+                    -webkit-flex: 1;
+                    /* For Internet Explorer 10 */
+                    -ms-flex: 1;
+                    /* For every other browser */
+                    flex: 1;
+                }
+
+                    div.navigation ul li a {
+                        display: block;
+                        height: 100%;
+                        text-decoration: none;
+                        text-align: center;
+                    }
+
+                        div.navigation ul li a:hover {
+                            background-color: #eeeeee;
+                        }
+
+                        div.navigation ul li a.active {
+                            background-color: #ff7d00;
+                        }
+
+                            div.navigation ul li a.active:focus {
+                                background-color: #ff7d00;
+                            }
+
+                        div.navigation ul li a div i {
+                            color: #565656;
+                        }
+
+                        div.navigation ul li a.active div i {
+                            color: white;
+                        }
+
+                        div.navigation ul li a div p {
+                            font-size: 12px;
+                            font-weight: 500;
+                            color: #565656;
+                        }
+
+                        div.navigation ul li a.active div p {
+                            color: white;
+                        }
+
+                        div.navigation ul li a div.bottom-navigation-button {
+                            height: 100%;
+                            display: -webkit-flex;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+        /* When the viewport is 450px or less */
+        @media screen and (max-width: 450px) {
+            /* Action buttons styling */
+            header div ul {
+                margin: 0;
+            }
+
+            /* Header search box styling */
+            form.search-form {
+                margin-right: 0px;
+            }
+
+            /* Main block styling */
+            main {
+                margin: 56px 0px;
+            }
+
+            /* Textbox styling */
+            form input[type=text] {
+                width: 100%;
+            }
+
+            /* Checkbox styling */
+            div.checkbox {
+                width: 100%;
+            }
+
+            /* Date picker, time picker, multiline textbox styling */
+            div.date input[type=date], div.time input[type=time], div.multi-line-textbox textarea, div.textbox input[type=text] {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            /* Form divider styling */
+            div.divider {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            /* Confirmation dialog box styling */
+            div#confirmation-dialog-box {
+                left: 0;
+                right: 0;
+            }
+
+            /* Notification bar styling */
+            div#notification {
+                left: 0;
+                right: 0;
+                bottom: 56px;
+                box-shadow: 0px -2px 5px rgba(0,0,0,.25);
+            }
+
+                /* Navigation bar styling */
+                /* If the notification bar is not displayed, add the shadow for the navigation bar */
+                div#notification[style="display: none;"] ~ div.navigation {
+                    box-shadow: 0px -2px 5px rgba(0,0,0,.25);
+                }
+        }
+
+        /* Styling for sub headings */
+        div.subheading {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3px;
+        }
+
+            div.subheading i.material-icons {
+                padding-right: 5px;
+                color: darkslategrey;
+            }
+
+            div.subheading p {
+                font-weight: bold;
+            }
+
+        /* If the device is shorter than 450px and in landscape */
+        /*@media screen and (min-height: 450px), screen and (orientation: landscape) {
+            header {
+                height: 48px;
+            }
+
+                header div div#action-buttons-container ul li button {
+                    width: 48px;
+                }
+
+            div#notification {
+                bottom: 73px;
+            }
+
+                div#notification div {
+                    min-height: 48px;
+                }
+
+                    div#notification div p {
+                        margin-right: 48px;
+                    }
+
+            div.navigation {
+                height: 48px;
+            }
+        }*/
+
+        /* When the viewport is 451px or more */
+        @media screen and (min-width: 451px) {
+            /* Action buttons styling */
+            header div ul {
+                margin-right: 10px;
+            }
+
+            /* Header search box styling */
+            form.search-form {
+                margin-right: 10px;
+                width: 250px;
+            }
+
+            /* Main block styling */
+            main {
+                margin: 66px 10px 66px 10px;
+            }
+
+            /* Checkbox styling */
+            div.checkbox {
+                width: 410px;
+            }
+
+            /* Date picker styling */
+            div.date {
+                width: 410px;
+            }
+
+                /* Date picker, time picker, multiline textbox styling */
+                div.date input[type=date], div.time input[type=time], div.multi-line-textbox textarea, div.textbox input[type=text] {
+                    width: 400px;
+                }
+
+            /* Form divider styling */
+            div.divider {
+                width: 410px;
+            }
+
+            /* Confirmation box styling */
+            div#confirmation-dialog-box {
+                width: 410px;
+                left: 50%;
+                margin-left: -225px;
+            }
+
+            /* Notification bar styling */
+            div#notification {
+                width: 350px;
+                box-shadow: 2px 2px 5px rgba(0,0,0,.25);
+            }
+
+            /* Navigation bar styling */
+            div.navigation {
+                box-shadow: 0px -2px 5px rgba(0,0,0,.25);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Only header and bottom navigation should be displayed by default -->
+    <header>
+        <div>
+            <!-- The default title is a long white horizontal bar made using white block symbols (&#9608;) -->
+            <p id="header-title">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</p>
+            <!-- Div containing buttons that go on the toolbar -->
+            <div id="action-buttons-container">
+                <ul id="default-action-buttons">
+                    <!-- Three default icons (White cirles) are displayed -->
+                    <li><button><i class="material-icons">brightness_1</i></button></li>
+                    <li><button><i class="material-icons">brightness_1</i></button></li>
+                    <li><button><i class="material-icons">brightness_1</i></button></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Load each page into this section -->
+    <main id="main">
+
+    </main>
+
+    <!-- Confirmation dialog box. Hidden by default -->
+    <div id="confirmation-dialog-box" hidden>
+        <!-- This inner div has a "relative" position attribute so elements inside can be aligned relative to the dialog box -->
+        <div>
+            <!-- The title will be in bold at the top of the dialog box -->
+            <p id="confirmation-dialog-title" style="font-weight: bold;">Title</p>
+            <!-- The message text is displayed in this paragraph tag (p tag) underneath the title -->
+            <p id="confirmation-dialog-text"></p>
+            <!-- The accept button -->
+            <button id="reject-button">Cancel</button>
+            <!-- The reject button -->
+            <button id="accept-button">Accept</button>
+        </div>
+    </div>
+
+    <!-- Notification bar. Hidden by default -->
+    <div id="notification" style="display: none;">
+        <!-- This inner div has a relative position attribute so elements inside can be aligned relative to the notification bar -->
+        <div>
+            <!-- Paragraph used to display the message -->
+            <p id="notification-text"></p>
+            <!-- Close button -->
+            <button id="notification-close-button"><i class="material-icons">clear</i></button>
+        </div>
+    </div>
+
+    <!-- Bottom navigation bar -->
+    <div class="navigation">
+        <!-- The list containing links for each page of the app -->
+        <ul>
+            <!--<li>
+                <a id="dashboard-link" class="active">
+                    <div class="bottom-navigation-button">
+                        <div>
+                            <i class="material-icons">dashboard</i>
+                            <p>Dashboard</p>
+                        </div>
+                    </div>
+                </a>
+            </li>-->
+            <li>
+                <!-- Link for timeline section -->
+                <a id="timeline-link" class="active">
+                    <div class="bottom-navigation-button">
+                        <div>
+                            <!-- The linear_scale icon (to represent a timeline) from Google material icons for web -->
+                            <i class="material-icons">linear_scale</i>
+                            <p>Timeline</p>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <!-- Link for goals section -->
+                <a id="goals-link">
+                    <div class="bottom-navigation-button">
+                        <div>
+                            <!-- The flag icon (to represent a goal) from Google material icons for web -->
+                            <i class="material-icons">flag</i>
+                            <p>Goals</p>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <!--<li>
+                <a id="statistics-link">
+                    <div class="bottom-navigation-button">
+                        <div>
+                            <i class="material-icons">trending_up</i>
+                            <p>Statistics</p>
+                        </div>
+                    </div>
+                </a>
+            </li>-->
+            <li>
+                <!-- Link for resources section -->
+                <a id="resources-link">
+                    <div class="bottom-navigation-button">
+                        <div>
+                            <!-- The insert_drive_file icon (depicts a file, used to represent rescources) from Google material icons for web -->
+                            <i class="material-icons">insert_drive_file</i>
+                            <p>Resources</p>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <!--<li>
+                <a id="comments-link">
+                    <div class="bottom-navigation-button">
+                        <div>
+                            <i class="material-icons">comment</i>
+                            <p>Comments</p>
+                        </div>
+                    </div>
+                </a>
+            </li>-->
+            <li>
+                <a id="info-link">
+                    <div class="bottom-navigation-button">
+                        <div>
+                            <i class="material-icons">info</i>
+                            <p>About</p>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- Link to app.js file. Not included JavaScript here directly because the initial load would take longer because this file would be bigger -->
+    <script src="app.js"></script>
+</body>
+</html>

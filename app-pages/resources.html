@@ -1,0 +1,24 @@
+<div class="outer-page-container" id="resources">
+    <!-- This script is an extension of app.js, so it can access all it's variables and methods -->
+    <script>
+        // Code here runs when the page loads
+        // Set the title in the header
+        headerTitle.innerHTML = "Resources";
+        // Set the action buttons
+        actionButtonsContainer.innerHTML = '<ul id="resources-action-buttons">' +
+            '<li><button id="resources-add" title="Add new resource"><i class="material-icons">add</i></button></li>' +
+            '</ul>' +
+            selectBarTemplate;
+        // Find interface elements on the page so that their values can be used or event handlers can be added
+        var actionButtons = document.getElementById("resources-action-buttons");
+        var addButton = document.getElementById("resources-add");
+    </script>
+
+    <div>
+        <!--<p style="text-align:center">Click <span style="font-weight: bold">+</span> to add a new file</p>-->
+        <div class="subheading">
+            <i class="material-icons">warning</i>
+            <p>This page is in development</p>
+        </div>
+    </div>
+</div>

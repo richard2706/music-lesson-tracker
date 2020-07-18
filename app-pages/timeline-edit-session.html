@@ -1,0 +1,109 @@
+<div class="outer-page-container" id="timeline-add-session">
+    <!-- This script is an extension of app.js, so it can access all it's variables and methods -->
+    <script>
+        // Code here runs when the page loads
+        // Set the title in the header. "&#9656;" is a small arrow
+        headerTitle.innerHTML = "Timeline &#9656; Edit session";
+        // Set the action buttons
+        actionButtonsContainer.innerHTML = '<ul id="timeline-edit-session-action-buttons">' +
+            '<li><button id="timeline-edit-session-delete" title="Delete"><i class="material-icons">delete</i></button></li>' +
+            '<li><button id="timeline-edit-session-share" title="Share"><i class="material-icons">share</i></button></li>' +
+            '<li><button id="timeline-edit-session-cancel" title="Cancel"><i class="material-icons">clear</i></button></li>' +
+            '<li><button id="timeline-edit-session-save" title="Save"><i class="material-icons">done</i></button></li>' +
+            '</ul>';
+        // Find interface elements on the page so that their values can be used or event handlers can be added
+        var deleteButton = document.getElementById("timeline-edit-session-delete");
+        var shareButton = document.getElementById("timeline-edit-session-share");
+        var cancelButton = document.getElementById("timeline-edit-session-cancel");
+        var saveButton = document.getElementById("timeline-edit-session-save");
+        var datePicker = document.getElementById("date-picker");
+        var timePicker = document.getElementById("time-picker");
+        var commentTextbox = document.getElementById("textbox");
+
+        datePicker.value = selectedCard.date;
+        timePicker.value = selectedCard.length;
+        commentTextbox.value = selectedCard.comment;
+
+        // When the delete button is clicked
+        deleteButton.addEventListener("click", () => {
+            showConfirmationDialog("Delete session", "Are you sure you want to delete this session?");
+        });
+
+        // When the accept button is clicked in the confirmation dialog box
+        confirmationAcceptButton.addEventListener("click", () => {
+            // Show a notification to tell the user that they deleted the session
+            showNotification("Session deleted");
+            // Delete the session from the database
+            deletePracticeSession(selectedCard.sessionID);
+            // Navigate back to the timeline page
+            $("#main").load("app-pages/timeline.html");
+        });
+
+        // When the reject button is clicked in the confirmation dialog box
+        confirmationRejectButton.addEventListener("click", () => {
+            showNotification("Session not deleted");
+        });
+
+        // When the share button is clicked
+        shareButton.addEventListener("click", () => {
+            // Create the string of text that will be shared. It uses the length, date and comment of the practice session
+            var shareText = "I practiced for " + selectedCard.length + " on " + selectedCard.date + ". " + selectedCard.comment;
+            // If the browser supports the Web Share API (https://developers.google.com/web/updates/2016/09/navigator-share)
+            if (navigator.share)
+                // Share the content using the title Practice Session, and the text to share in the shareText variable defined above. Also handles errors in the catch section
+                navigator.share({ title: "Practice session", text: shareText }).then(function () { console.log("shared"); }).catch(function (error) { showNotification("Error: could not share. " + error); });
+            else
+                // Notify the user if their browser does not support the Web Share API
+                showNotification("Error: This device does not support browser sharing");
+        });
+
+        // When the cancel button is clicked
+        cancelButton.addEventListener("click", () => {
+            $("#main").load("app-pages/timeline.html");
+        });
+
+        // When the save button is clicked
+        saveButton.addEventListener("click", () => {
+            // If any values have changed
+            if (datePicker.value != selectedCard.date || timePicker.value != selectedCard.length || commentTextbox.value != selectedCard.comment)
+                // If any required values are empty (comment box can be empty) show a notification to tell the user to fill the boxes in
+                if (datePicker.value == "" || timePicker.value == "")
+                    showNotification("Please fill in all information");
+                else {
+                    // Update the practice session in the database
+                    updatePracticeSession(selectedCard.sessionID, datePicker.value, timePicker.value, selectedCard.type, commentTextbox.value);
+                    // Temporary fix so that the list of sessions updates after adding a session
+                    location.reload();
+                    // Navigate back to timeline
+                    $("#main").load("app-pages/timeline.html");
+                }
+            else
+                // If none of the values have changed, navigate back to timeline
+                $("#main").load("app-pages/timeline.html");
+        });
+    </script>
+
+    <!-- This is the HTML code for the form used to edit a practice session -->
+    <div>
+        <!-- Date picker for the date of the practice session -->
+        <div class="date">
+            <p>Date</p>
+            <!-- Date picker input field -->
+            <input id="date-picker" type="date" />
+        </div>
+        <div class="divider"></div>
+        <!-- Time picker for the length of the practice session -->
+        <div class="time">
+            <p>Length <span style="color:grey">hh:mm</span></p>
+            <!-- Time picker input field -->
+            <input id="time-picker" type="time" />
+        </div>
+        <div class="divider"></div>
+        <!-- Textbox for any comments -->
+        <div class="multi-line-textbox">
+            <p>Comments</p>
+            <!-- Textbox input field with maximum 250 characters -->
+            <textarea id="textbox" maxlength="250"></textarea>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,147 @@
+<div class="outer-page-container" id="timeline">
+    <!-- This script is an extension of app.js, so it can access all it's variables and methods -->
+    <script>
+        // Code here runs when the page loads
+        // Get handler for timeline page
+        var timelinePage = document.getElementById("timeline");
+        // Set the title in the header
+        headerTitle.innerHTML = "Timeline";
+        // Set the action butttons
+        actionButtonsContainer.innerHTML = '<ul id="timeline-action-buttons">' +
+            '<li><button id="timeline-add" title="New practice session"><i class="material-icons">add</i></button></li>' +
+            '</ul>' +
+            selectBarTemplate;
+        // Find interface elements on the page so that their values can be used or event handlers can be added
+        var actionButtons = document.getElementById("timeline-action-buttons");
+        var addButton = document.getElementById("timeline-add");
+        var selectButton = document.getElementById("timeline-select");
+        var selectActionButtons = document.getElementById("select-action-buttons");
+        var selectDeleteButton = document.getElementById("select-delete");
+        var selectCancelButton = document.getElementById("select-cancel");
+        var selectedElements = document.getElementsByClassName("selected");
+        //console.log(selectedElements);
+
+        // Array of practice sessions retrieved from the database
+        var sessions = readAllSessions();
+        // Variable to contain all the cards displayed on this page
+        var content = '<div><div class="subheading"><i class="material-icons">warning</i><p>Select a card to edit it</p></div></div>';
+        // Styling for the cards in the content variable. This cannot be put in the style tag at the top of this page since the
+        // styling would be applied before the HTML in the content variable is displayed, meaning the cards would not be styled
+        // with any css
+        var cardStylesheet = '<style>' +
+            'div#timeline div.card:active {' +
+                'background-color: #ffae43;' +
+            '}' +
+
+            'div#timeline div.card div div {' +
+                'display: -webkit-flex;' +
+                'display: flex;' +
+                'flex-wrap: wrap;' +
+            '}' +
+
+            'div#timeline div.card div div p.mini-card {' +
+                'white-space: nowrap;' +
+                'padding: 5px 8px;' +
+                'margin-right: 5px;' +
+                'border-radius: 2px;' +
+                'color: white;' +
+            '}' +
+
+            'div#timeline div.card div div p.mini-card.date {' +
+                'background-color: gray;' +
+            '}' +
+
+            'div#timeline div.card div div p.mini-card.length {' +
+                'background-color: #279a00;' +
+            '}' +
+
+            'div#timeline div.card div div p.mini-card.type {' +
+                'background-color: #ff7d00;' +
+            '};' +
+            '</style>';
+        console.log(sessions);
+        if (sessions.length !== 0) {
+            sessions.forEach(function (card) {
+                // The length of the practice session from the array
+                var length = card.length;
+                // The length split into an array of the hours then minutes
+                var lengthArray = length.split(":");
+                // The first item of the array is the number of hours
+                var hours = lengthArray[0];
+                // The second item of teh array is the number of minutes
+                var mins = lengthArray[1];
+                // Add a card with all the information about the current session
+                content += '<div class="card">' +
+                    '<input type="checkbox" hidden />' +
+                    '<div>' +
+                    '<div>' +
+                    '<p class="id" hidden>' + card.sessionID + '</p>' +
+                    '<p class="mini-card date">' + card.date + '</p>' +
+                    '<p class="mini-card length"><span class="hours">' + hours + '</span>h <span class="mins">' + mins + '</span>m</p>' +
+                    '<p class="mini-card type">' + card.type + '</p>' +
+                    '</div>';
+                // If there is a comment, display it in the same card
+                if (card.comment != "") {
+                    content += '<p class="comment" style="margin-top:5px;">' + card.comment + '</p>';
+                }
+                // Close the div tags opened above
+                content += '</div></div>';
+            });
+            // Add the stylesheet and cards to the page
+            timelinePage.innerHTML = cardStylesheet + content;
+        }
+
+        // When the add button is clicked
+        addButton.addEventListener("click", () => {
+            // Navigate to the add session page
+            $("#main").load("app-pages/timeline-add-session.html");
+        });
+
+        // Gets alist of all session cards displayed on the page
+        var cards = document.querySelectorAll(".card");
+        Array.from(cards).forEach(card => {
+            // Runs when a card is clicked
+            card.addEventListener("click", () => {
+                // Find the comment in the card, if there is one, or set it to blank if there isn't one
+                var selectedCardComment;
+                if (card.querySelector(".comment") != null)
+                    selectedCardComment = card.querySelector(".comment").innerHTML;
+                else
+                    selectedCardComment = "";
+                // Create the card object containing the id, date, length, type and comment from the card that the user clicked on
+                var selectedCard = {
+                    sessionID: parseInt(card.querySelector(".id").innerHTML),
+                    date: card.querySelector(".date").innerHTML,
+                    length: card.querySelector(".length span.hours").innerHTML + ":" + card.querySelector(".length span.mins").innerHTML,
+                    type: card.querySelector(".type").innerHTML,
+                    comment: selectedCardComment
+                };
+                // Runs the editPracticeSession method in app.js so that the selectedCard object can be accessed on the timeline edit page
+                editPracticeSession(selectedCard);
+                // Navigate to the timeline edit page
+                $("#main").load("app-pages/timeline-edit-session.html");
+            });
+        });
+    </script>
+
+    <!-- Displayed by default if there are no items in the sessions object store (ie the user has not added any sessions to the database -->
+    <div>
+        <div class="subheading">
+            <i class="material-icons">warning</i>
+            <p style="text-align:center">Click <span style="font-weight: bold">+</span> to add a new practice session</p>
+        </div>
+    </div>
+
+    <!-- This is the app overview, displayed when there are not practice sessions stored (and therefore when the user visits the site for the first time) -->
+    <div>
+        <div class="subheading">
+            <i class="material-icons">warning</i>
+            <p>This app will help you keep track of your music lessons and practice</p>
+        </div>
+        <ul style="margin: 0px;">
+            <li>The timeline section lets you add, edit and delete practice sessions as well as display a list of all practice sessions</li>
+            <li>The goals section lets you add, edit and delete a goal, as well as display the current goal</li>
+            <li>The resources section is incomplete and was not meant to be part of the final product, but I was unable to remove the button for it</li>
+        </ul>
+    </div>
+</div>

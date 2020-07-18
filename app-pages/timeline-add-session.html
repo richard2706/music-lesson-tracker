@@ -1,0 +1,72 @@
+<div class="outer-page-container" id="timeline-add-session">
+    <!-- This script is an extension of app.js, so it can access all it's variables and methods -->
+    <script>
+        // Code here runs when the page loads
+        // Set the title in the header. "&#9656;" is a small arrow
+        headerTitle.innerHTML = "Timeline &#9656; New session";
+        // Set the action buttons
+        actionButtonsContainer.innerHTML = '<ul id="timeline-add-session-action-buttons">' +
+            '<li><button id="timeline-add-session-cancel" title="Cancel"><i class="material-icons">clear</i></button></li>' +
+            '<li><button id="timeline-add-session-add" title="Add"><i class="material-icons">done</i></button></li>' +
+            '</ul>';
+        // Find interface elements on the page so that their values can be used or event handlers can be added
+        var addButton = document.getElementById("timeline-add-session-add");
+        var cancelButton = document.getElementById("timeline-add-session-cancel");
+        var datePicker = document.getElementById("date-picker");
+        // Sets the date in the date picker to current date
+        datePicker.valueAsDate = new Date();
+        // Sets the maximum date in the dateDicker to the current date
+        datePicker.max = new Date().toJSON().slice(0, 10).split("-").join("-");
+
+        // This code runs when the add button is clicked
+        addButton.addEventListener("click", () => {
+            // Get the values the user entered into the form
+            var date = datePicker.value;
+            var length = document.getElementById("time-picker").value;
+            var type = "Practice session";
+            var comment = document.getElementById("textbox").value;
+            // if any values are blank or the length is 00:00
+            if (date == "" || length == "" || length == "00:00")
+                // Show a notification to tell the user they need to enter more data in the form
+                showNotification("Please fill in all information");
+            else {
+                // Calls the addPracticeSession method in app.js to add the data to the database
+                addPracticeSession(date, length, type, comment);
+                // Temporary fix so that the list of sessions updates after adding a session
+                location.reload();
+                // Navigates back to the timeline.html page
+                $("#main").load("app-pages/timeline.html");
+            }
+        });
+
+        // Runs when the cancel button is clicked
+        cancelButton.addEventListener("click", () => {
+            // Navigates to the timeline.html page
+            $("#main").load("app-pages/timeline.html");
+        });
+    </script>
+
+    <!-- This is the HTML code for the form used to add a new practice session -->
+    <div>
+        <!-- Date picker for the date of the practice session -->
+        <div class="date">
+            <p>Date</p>
+            <!-- Date picker input field -->
+            <input id="date-picker" type="date" />
+        </div>
+        <div class="divider"></div>
+        <!-- Time picker for the length of the practice session -->
+        <div class="time">
+            <p>Length <span style="color:grey">hh:mm</span></p>
+            <!-- Time picker input field -->
+            <input id="time-picker" type="time" />
+        </div>
+        <div class="divider"></div>
+        <!-- Textbox for any comments -->
+        <div class="multi-line-textbox">
+            <p>Comments</p>
+            <!-- Textbox input field with maximum 250 characters -->
+            <textarea id="textbox" maxlength="250"></textarea>
+        </div>
+    </div>
+</div>
