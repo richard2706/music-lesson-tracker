@@ -1,12 +1,12 @@
-# music-lesson-tracker
+# Music Lesson Progress Tracker Web App
 Web app that allows user to track music lesson progress
 
-## To access
+## Try the web app
 Access using the following link:
 
 [Go to Music Lesson Tracker](richard2706.github.io/music-lesson-tracker "Hosted on GitHub Pages")
 
-## Features
+## Highlighted Features
 Keep track of practice sessions
 
 <img src="https://hwcoea.am.files.1drv.com/y4mBIdIQ5SfYISr3NjCaQx6GU0VgvC8qmdIXxEVEN--fCnqY5aFpldlMgirj7rfYuO74l_j3juQ66IVORLliKGG3EnyXTv5uZ_yIBQnJ_Dy-84coUeAf3viqn9QcKvJK6qzVv1YXwNWDah7AADRkPHwD9SdDc6hTAs6hZB9-mHGFVBh32uWWVA7OAb533RDXXdAFSNMQn0OWwowhyeFa9Jl2w?width=720&height=1281&cropmode=none" alt="Screenshot showing add practice session screen" width="200">
