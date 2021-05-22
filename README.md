@@ -4,7 +4,7 @@ Web app that allows user to track music lesson progress
 ## Try the web app
 Access using the following link:
 
-[Go to Music Lesson Tracker](richard2706.github.io/music-lesson-tracker "Hosted on GitHub Pages")
+[Go to Music Lesson Tracker](https://richard2706.github.io/music-lesson-tracker/ "Hosted on GitHub Pages")
 
 ## Highlighted Features
 Keep track of practice sessions
